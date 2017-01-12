@@ -43,6 +43,8 @@ struct EventDetails {
 	}
 };
 
+using Events = std::vector<std::pair<EventType, EventInfo>>;
+
 struct Binding {
 	Binding(const std::string name) : name(name), details(name), c(0) {}
 	void bindEvent(EventType type, EventInfo info = EventInfo()) {
@@ -57,10 +59,16 @@ struct Binding {
 };
 
 using Bindings = std::unordered_map<std::string, std::shared_ptr<Binding>>;
-using Events = std::vector<std::pair<EventType, EventInfo>>;
+
 using CallbackContainer = std::unordered_map<std::string, std::function<void(std::shared_ptr<EventDetails>)>>;
 enum class StateType;
 using Callbacks = std::unordered_map<StateType, CallbackContainer>;
+
+
+
+
+
+
 
 class EventManager {
 private:
