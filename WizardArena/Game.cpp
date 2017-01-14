@@ -1,23 +1,34 @@
 #include "Game.hpp"
 
-Game::Game() : window("Chapter 5", sf::Vector2u(800, 600)), stateManager(context) {
+Game::Game(): window("Chapter 5", sf::Vector2u(800, 600)), stateManager(&context){
+	clock.restart();
+	srand(time(nullptr));
 
+	context.window = &window;
+	context.eventManager = window.getEventManager();
+
+	stateManager.switchTo(StateType::Intro);
 }
 
-Game::~Game() {
+Game::~Game(){ }
 
+sf::Time Game::getElapsed(){ return clock.getElapsedTime(); }
+void Game::restartClock(){ elapsed = clock.restart(); }
+Window* Game::getWindow(){ return &window; }
+
+void Game::update(){
+	window.update();
+	stateManager.update(elapsed);
 }
 
-void Game::render() {
-	window->beginDraw();
-	//Draw stuff between these
-	window->endDraw();
+void Game::render(){
+	window.beginDraw();
+	// Render here.
+	stateManager.draw();
+	window.endDraw();
 }
 
-sf::Time Game::getElapsed() {
-	return elapsed;
-}
-
-void Game::restartClock() {
-	elapsed = clock.restart();
+void Game::lateUpdate(){
+	stateManager.processRequests();
+	restartClock();
 }

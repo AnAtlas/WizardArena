@@ -1,123 +1,126 @@
 #include "StateManager.hpp"
 
-StateManager::StateManager(std::shared_ptr<SharedContext> shared) : sharedContext(shared) {
+StateManager::StateManager(SharedContext* l_shared)
+	: shared(l_shared)
+{
+	registerState<State_Intro>(StateType::Intro);
 	registerState<State_MainMenu>(StateType::MainMenu);
+	registerState<State_Game>(StateType::Game);
+	registerState<State_Paused>(StateType::Paused);
 }
 
-StateManager::~StateManager() {
-	for (auto itr : states) {
+StateManager::~StateManager(){
+	for (auto &itr : states){
 		itr.second->onDestroy();
+		delete itr.second;
 	}
-	states.clear();
 }
 
-void StateManager::draw() {
-	if (states.empty())
-		return;
-	if (states.back().second->isTransparent() && states.size() > 1) {
+void StateManager::update(const sf::Time& l_time){
+	if (states.empty()){ return; }
+	if (states.back().second->isTranscendent() && states.size() > 1){
 		auto itr = states.end();
-		while (itr != states.begin()) {
-			if (itr != states.end()) {
-				if (!itr->second->isTransparent())
+		while (itr != states.begin()){
+			if (itr != states.end()){
+				if (!itr->second->isTranscendent()){
 					break;
+				}
 			}
 			--itr;
 		}
-		for (; itr != states.end(); ++itr) {
+		for (; itr != states.end(); ++itr){
+			itr->second->update(l_time);
+		}
+	} else {
+		states.back().second->update(l_time);
+	}
+}
+
+void StateManager::draw(){
+	if (states.empty()){ return; }
+	if (states.back().second->isTransparent() && states.size() > 1){
+		auto itr = states.end();
+		while (itr != states.begin()){
+			if (itr != states.end()){
+				if (!itr->second->isTransparent()){
+					break;
+				}
+			}
+			--itr;
+		}
+		for (; itr != states.end(); ++itr){
 			itr->second->draw();
 		}
-	}
-	else {
+	} else {
 		states.back().second->draw();
 	}
 }
 
-void StateManager::update(const sf::Time time) {
-	if (states.empty())
-		return;
+SharedContext* StateManager::getContext(){ return shared; }
 
-	if (states.back().second->isTranscendent() && states.size() > 1) {
-		auto itr = states.end();
-		while (itr != states.begin()) {
-			if (itr != states.end()) {
-				if (!itr->second->isTranscendent())
-					break;
-			}
-			--itr;
-		}
-		for (; itr != states.end(); ++itr) {
-			itr->second->update(time);
-		}
-	}
-	else {
-		states.back().second->update(time);
-	}
-}
-
-std::shared_ptr<SharedContext> StateManager::getContext() {
-	return sharedContext;
-}
-
-bool StateManager::hasState(const StateType type) {
-	for (auto itr = states.begin(); itr != states.end(); ++itr) {
-		if (itr->first == type) {
-			auto removed = std::find(toRemove.begin(), toRemove.end(), type);
-			if (removed == toRemove.end())
-				return true;
+bool StateManager::hasState(const StateType& l_type){
+	for (auto itr = states.begin();
+		itr != states.end(); ++itr)
+	{
+		if (itr->first == l_type){
+			auto removed = std::find(toRemove.begin(), toRemove.end(), l_type);
+			if (removed == toRemove.end()){ return true; }
 			return false;
 		}
 	}
 	return false;
 }
 
-void StateManager::remove(const StateType type) {
-	toRemove.push_back(type);
-}
-
-void StateManager::processRequests() {
-	while (toRemove.begin() != toRemove.end()) {
+void StateManager::processRequests(){
+	while (toRemove.begin() != toRemove.end()){
 		removeState(*toRemove.begin());
 		toRemove.erase(toRemove.begin());
 	}
 }
 
-void StateManager::switchTo(const StateType type) {
-	sharedContext->eventManager->setCurrentState(type);
-	for (auto itr = states.begin(); itr != states.end(); ++itr) {
-		if (itr->first == type) {
+void StateManager::switchTo(const StateType& l_type){
+	shared->eventManager->setCurrentState(l_type);
+	for (auto itr = states.begin();
+		itr != states.end(); ++itr)
+	{
+		if (itr->first == l_type){
 			states.back().second->deactivate();
-			StateType tempType = itr->first;
-			std::shared_ptr<BaseState> tempState = itr->second;
+			StateType tmp_type = itr->first;
+			BaseState* tmp_state = itr->second;
 			states.erase(itr);
-			states.emplace_back(tempType, tempState);
-			tempState->activate();
-			return; 
+			states.emplace_back(tmp_type, tmp_state);
+			tmp_state->activate();
+			return;
 		}
 	}
 
-	// State with type wasn't found.
-	if (states.empty()) {
-		states.back().second->deactivate();
-	}
-	createState(type);
+	// State with l_type wasn't found.
+	if (!states.empty()){ states.back().second->deactivate(); }
+	createState(l_type);
 	states.back().second->activate();
 }
 
-void StateManager::createState(const StateType type) {
-	auto newState = stateFactory.find(type);
-	if (newState == stateFactory.end()) {
-		return;
-	}
-	std::shared_ptr<BaseState> state = newState->second;
-	states.emplace_back(type, state);
+void StateManager::remove(const StateType& l_type){
+	toRemove.push_back(l_type);
+}
 
+// Private methods.
+
+void StateManager::createState(const StateType& l_type){
+	auto newState = stateFactory.find(l_type);
+	if (newState == stateFactory.end()){ return; }
+	BaseState* state = newState->second();
+	states.emplace_back(l_type, state);
 	state->onCreate();
 }
 
-void StateManager::removeState(const StateType type) {
-	for (auto itr = states.begin(); itr != states.end(); ++itr) {
-		if (itr->first == type) {
+void StateManager::removeState(const StateType& l_type){
+	for (auto itr = states.begin();
+		itr != states.end(); ++itr)
+	{
+		if (itr->first == l_type){
 			itr->second->onDestroy();
+			delete itr->second;
 			states.erase(itr);
 			return;
 		}

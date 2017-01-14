@@ -23,14 +23,22 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="State_Game.cpp" />
+    <ClCompile Include="State_Intro.cpp" />
+    <ClCompile Include="State_MainMenu.cpp" />
+    <ClCompile Include="State_Paused.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseState.hpp" />
     <ClInclude Include="EventManager.hpp" />
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="SharedContext.hpp" />
     <ClInclude Include="StateManager.hpp" />
+    <ClInclude Include="State_Game.hpp" />
+    <ClInclude Include="State_Intro.hpp" />
     <ClInclude Include="State_MainMenu.hpp" />
+    <ClInclude Include="State_Paused.hpp" />
     <ClInclude Include="Window.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

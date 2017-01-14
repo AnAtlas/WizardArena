@@ -1,17 +1,11 @@
 #include "Game.hpp"
 
-
-int main()
-{
+void main(int argc, void** argv[]){
+	// Program entry point.
 	Game game;
-
-	while (!game.getWindow()->isDone()) {
-		game.handleInput();
+	while(!game.getWindow()->isDone()){
 		game.update();
 		game.render();
-		sf::sleep(sf::seconds(0.2));
-		game.restartClock();
+		game.lateUpdate();
 	}
-
-	return 0;
 }

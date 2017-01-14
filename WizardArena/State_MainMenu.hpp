@@ -1,15 +1,10 @@
 #pragma once
 #include "BaseState.hpp"
 #include "EventManager.hpp"
-/*
-This state puts all the main menu elements on the screen
-*/
-class State_MainMenu : public BaseState {
-private:
 
-
+class State_MainMenu : public BaseState{
 public:
-	State_MainMenu(std::shared_ptr<StateManager> stateManager);
+	State_MainMenu(StateManager* stateManager);
 	~State_MainMenu();
 
 	void onCreate();
@@ -18,8 +13,18 @@ public:
 	void activate();
 	void deactivate();
 
-	void update(const sf::Time time);
+	void update(const sf::Time& time);
 	void draw();
 
-	void mouseClick(std::shared_ptr<EventDetails> details);
+	void mouseClick(EventDetails* details);
+private:
+	sf::Font font;
+	sf::Text text;
+
+	sf::Vector2f buttonSize;
+	sf::Vector2f buttonPos;
+	unsigned int buttonPadding;
+
+	sf::RectangleShape rects[3];
+	sf::Text labels[3];
 };

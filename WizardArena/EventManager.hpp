@@ -1,40 +1,51 @@
-          #pragma once
-#include <functional>
-#include <unordered_map>
+#pragma once
+#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <memory>
+#include <vector>
+#include <unordered_map>
+#include <functional>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
-enum class EventType {
+enum class EventType{
 	KeyDown = sf::Event::KeyPressed,
 	KeyUp = sf::Event::KeyReleased,
-	MouseButtonDown = sf::Event::MouseButtonPressed,
-	MouseButtonUp = sf::Event::MouseButtonReleased,
+	MButtonDown = sf::Event::MouseButtonPressed,
+	MButtonUp = sf::Event::MouseButtonReleased,
 	MouseWheel = sf::Event::MouseWheelMoved,
 	WindowResized = sf::Event::Resized,
+	GainedFocus = sf::Event::GainedFocus,
+	LostFocus = sf::Event::LostFocus,
+	MouseEntered = sf::Event::MouseEntered,
+	MouseLeft = sf::Event::MouseLeft,
+	Closed = sf::Event::Closed,
 	TextEntered = sf::Event::TextEntered,
 	Keyboard = sf::Event::Count + 1, Mouse, Joystick
 };
 
-struct EventInfo {
-	EventInfo() { code = 0; }
-	EventInfo(int event) { code = event; }
-	union {
+struct EventInfo{
+	EventInfo(){ code = 0; }
+	EventInfo(int l_event){ code = l_event; }
+	union{
 		int code;
 	};
 };
 
-struct EventDetails {
-	EventDetails(const std::string bindName) : name(bindName) {
+struct EventDetails{
+	EventDetails(const std::string& l_bindName)
+		: name(l_bindName){
 		clear();
 	}
 	std::string name;
+
 	sf::Vector2i size;
 	sf::Uint32 textEntered;
 	sf::Vector2i mouse;
 	int mouseWheelDelta;
-	int keyCode;
+	int keyCode; // Single key code.
 
-	void clear() {
+	void clear(){
 		size = sf::Vector2i(0, 0);
 		textEntered = 0;
 		mouse = sf::Vector2i(0, 0);
@@ -45,71 +56,70 @@ struct EventDetails {
 
 using Events = std::vector<std::pair<EventType, EventInfo>>;
 
-struct Binding {
-	Binding(const std::string name) : name(name), details(name), c(0) {}
-	void bindEvent(EventType type, EventInfo info = EventInfo()) {
-		events.emplace_back(type, info);
+struct Binding{
+	Binding(const std::string& l_name) : name(l_name), details(l_name), c(0){}
+	~Binding(){}
+	void bindEvent(EventType l_type, EventInfo l_info = EventInfo()){
+		events.emplace_back(l_type, l_info);
 	}
 
 	Events events;
 	std::string name;
-	int c; //Count of events that are "happening"
+	int c; // Count of events that are "happening".
 
 	EventDetails details;
 };
 
-using Bindings = std::unordered_map<std::string, std::shared_ptr<Binding>>;
-
-using CallbackContainer = std::unordered_map<std::string, std::function<void(std::shared_ptr<EventDetails>)>>;
+using Bindings = std::unordered_map<std::string, Binding*>;
+// Callback container.
+using CallbackContainer = std::unordered_map<std::string, std::function<void(EventDetails*)>>;
+// State callback container.
 enum class StateType;
 using Callbacks = std::unordered_map<StateType, CallbackContainer>;
 
-
-
-
-
-
-
-class EventManager {
-private:
-	Bindings bindings;
-	Callbacks callbacks;
-	bool hasFocus;
-	StateType currentState;
-
-	void loadBindings();
+class EventManager{
 public:
-
 	EventManager();
 	~EventManager();
 
-	bool addBinding(std::shared_ptr<Binding> binding);
-	bool RemoveBinding(std::string name);
-	void setFocus(const bool& focus);
+	bool addBinding(Binding *l_binding);
+	bool removeBinding(std::string l_name);
 
+	void setCurrentState(StateType l_state);
+	void setFocus(const bool& l_focus);
+
+	// Needs to be defined in the header!
 	template<class T>
-	bool addCallback(StateType state, const std::string name, void (T::* func)(EventDetails*), T* instance) {
-		auto itr = callbacks.emplace(state, CallbackContainer()).first;
-		auto temp = std::bind(func, instance, std::placeholders::_1);
-		return itr->second.emplace(name, temp).second;
+	bool addCallback(StateType l_state, const std::string& l_name,
+		void(T::*l_func)(EventDetails*), T* l_instance)
+	{
+		auto itr = callbacks.emplace(l_state, CallbackContainer()).first;
+		auto temp = std::bind(l_func, l_instance, std::placeholders::_1);
+		return itr->second.emplace(l_name, temp).second;
 	}
 
-	bool removeCallback(StateType state, const std::string name) {
-		auto itr = callbacks.find(state);
-		if (itr == callbacks.end())
-			return false;
-		auto itr2 = itr->second.find(name);
-		if (itr2 == itr->second.end())
-			return false;
-		itr->second.erase(name);
+	bool removeCallback(StateType l_state, const std::string& l_name){
+		auto itr = callbacks.find(l_state);
+		if (itr == callbacks.end()){ return false; }
+		auto itr2 = itr->second.find(l_name);
+		if (itr2 == itr->second.end()){ return false; }
+		itr->second.erase(l_name);
 		return true;
 	}
 
-	void handleEvent(sf::Event& event);
-
+	void handleEvent(sf::Event& l_event);
 	void update();
 
-	sf::Vector2i getMousePosition(std::shared_ptr<sf::RenderWindow> window = nullptr) {
-		return (window ? sf::Mouse::getPosition(*window) : sf::Mouse::getPosition());
+	// Getters.
+	sf::Vector2i getMousePos(sf::RenderWindow* l_wind = nullptr){
+		return (l_wind ? sf::Mouse::getPosition(*l_wind) : sf::Mouse::getPosition());
 	}
+private:
+	void loadBindings();
+
+	StateType currentState;
+	Bindings bindings;
+	Callbacks callbacks;
+
+	bool hasFocus;
 };
