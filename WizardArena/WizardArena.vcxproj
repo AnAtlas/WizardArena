@@ -19,9 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Anim_Base.cpp" />
+    <ClCompile Include="Anim_Directional.cpp" />
+    <ClCompile Include="EntityBase.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="State_Game.cpp" />
     <ClCompile Include="State_Intro.cpp" />
@@ -30,15 +35,24 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Anim_Base.hpp" />
+    <ClInclude Include="Anim_Directional.hpp" />
     <ClInclude Include="BaseState.hpp" />
+    <ClInclude Include="Directions.hpp" />
+    <ClInclude Include="EntityBase.hpp" />
     <ClInclude Include="EventManager.hpp" />
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="Map.hpp" />
+    <ClInclude Include="ResourceManager.hpp" />
     <ClInclude Include="SharedContext.hpp" />
+    <ClInclude Include="SpriteSheet.hpp" />
     <ClInclude Include="StateManager.hpp" />
     <ClInclude Include="State_Game.hpp" />
     <ClInclude Include="State_Intro.hpp" />
     <ClInclude Include="State_MainMenu.hpp" />
     <ClInclude Include="State_Paused.hpp" />
+    <ClInclude Include="TextureManager.hpp" />
+    <ClInclude Include="Utilities.hpp" />
     <ClInclude Include="Window.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

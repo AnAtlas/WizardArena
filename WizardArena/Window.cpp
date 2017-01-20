@@ -66,3 +66,11 @@ void Window::update(){
 
 	eventManager.update();
 }
+
+sf::FloatRect Window::getViewSpace() {
+	sf::Vector2f viewCenter = window.getView().getCenter();
+	sf::Vector2f viewSize = window.getView().getSize();
+	sf::Vector2f viewSizeHalf(viewSize.x / 2, viewSize.y / 2);
+	sf::FloatRect viewSpace(viewCenter - viewSizeHalf, viewSize);
+	return viewSpace;
+}

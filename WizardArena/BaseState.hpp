@@ -23,9 +23,11 @@ public:
 	void setTranscendent(const bool& l_transcendence){ transcendent = l_transcendence; }
 	bool isTranscendent()const{ return transcendent; }
 	StateManager* getStateManager(){ return stateMgr; }
+	sf::View& getView() { return view; }
 
 protected:
 	StateManager* stateMgr;
+	sf::View view;
 	bool transparent;
 	bool transcendent;
 };

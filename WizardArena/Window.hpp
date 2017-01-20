@@ -26,6 +26,8 @@ public:
 	sf::RenderWindow* getRenderWindow();
 	EventManager* getEventManager();
 	sf::Vector2u getWindowSize();
+	sf::FloatRect getViewSpace();
+
 private:
 	void setup(const std::string& title, const sf::Vector2u& size);
 	void create();

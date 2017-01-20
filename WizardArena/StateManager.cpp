@@ -49,6 +49,7 @@ void StateManager::draw(){
 			--itr;
 		}
 		for (; itr != states.end(); ++itr){
+			shared->window->getRenderWindow()->setView(itr->second->getView());
 			itr->second->draw();
 		}
 	} else {
@@ -80,9 +81,7 @@ void StateManager::processRequests(){
 
 void StateManager::switchTo(const StateType& l_type){
 	shared->eventManager->setCurrentState(l_type);
-	for (auto itr = states.begin();
-		itr != states.end(); ++itr)
-	{
+	for (auto itr = states.begin(); itr != states.end(); ++itr){
 		if (itr->first == l_type){
 			states.back().second->deactivate();
 			StateType tmp_type = itr->first;
@@ -90,14 +89,18 @@ void StateManager::switchTo(const StateType& l_type){
 			states.erase(itr);
 			states.emplace_back(tmp_type, tmp_state);
 			tmp_state->activate();
+			shared->window->getRenderWindow()->setView(tmp_state->getView());
 			return;
 		}
 	}
 
 	// State with l_type wasn't found.
-	if (!states.empty()){ states.back().second->deactivate(); }
+	if (!states.empty()){ 
+		states.back().second->deactivate(); 
+	}
 	createState(l_type);
 	states.back().second->activate();
+	shared->window->getRenderWindow()->setView(states.back().second->getView());
 }
 
 void StateManager::remove(const StateType& l_type){
@@ -110,6 +113,7 @@ void StateManager::createState(const StateType& l_type){
 	auto newState = stateFactory.find(l_type);
 	if (newState == stateFactory.end()){ return; }
 	BaseState* state = newState->second();
+	state->view = shared->window->getRenderWindow()->getDefaultView();
 	states.emplace_back(l_type, state);
 	state->onCreate();
 }
