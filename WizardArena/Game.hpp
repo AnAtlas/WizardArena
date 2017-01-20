@@ -2,7 +2,8 @@
 #include "Window.hpp"
 #include "EventManager.hpp"
 #include "StateManager.hpp"
-#include "SharedContext.hpp"
+#include "TextureManager.hpp"
+#include "EntityManager.hpp"
 #include <iostream>
 
 class Game{
@@ -21,6 +22,8 @@ private:
 	SharedContext context;
 	Window window;
 	StateManager stateManager;
+	EntityManager entityManager;
+	TextureManager textureManager;
 	sf::Clock clock;
 	sf::Time elapsed;
 	void restartClock();

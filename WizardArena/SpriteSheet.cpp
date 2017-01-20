@@ -85,6 +85,7 @@ bool SpriteSheet::loadSheet(const std::string& file) {
 	std::cerr << "! Failed loading spritesheet : " << file << std::endl;
 	return false;
 }
+
 void SpriteSheet::releaseSheet() {
 	textureManager->releaseResource(texture);
 	animationCurrent = nullptr;
@@ -112,6 +113,10 @@ void SpriteSheet::setDirection(const Direction& dir) {
 
 void SpriteSheet::cropSprite(const sf::IntRect& rect) {
 	sprite.setTextureRect(rect);
+}
+
+Anim_Base* SpriteSheet::getCurrentAnim() {
+	return animationCurrent;
 }
 
 bool SpriteSheet::setAnimation(const std::string& name, const bool& play, const bool& loop) {

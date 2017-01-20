@@ -62,6 +62,7 @@ public:
 	int getActionEnd();
 	float getFrameTime();
 	float getElapsedTime();
+	std::string getName();
 
 	bool isLooping();
 	bool isPlaying();

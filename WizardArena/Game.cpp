@@ -1,11 +1,14 @@
 #include "Game.hpp"
 
-Game::Game(): window("Chapter 5", sf::Vector2u(800, 600)), stateManager(&context){
+Game::Game(): window("Chapter 7", sf::Vector2u(800, 600)), stateManager(&context), entityManager(&context, 100)
+{
 	clock.restart();
 	srand(time(nullptr));
 
 	context.window = &window;
 	context.eventManager = window.getEventManager();
+	context.textureManager = &textureManager;
+	context.entityManager = &entityManager;
 
 	stateManager.switchTo(StateType::Intro);
 }
@@ -25,6 +28,11 @@ void Game::render(){
 	window.beginDraw();
 	// Render here.
 	stateManager.draw();
+
+	//DEBUG
+	if (context.debugOverlay.debug()) {
+		context.debugOverlay.draw(window.getRenderWindow());
+	}
 	window.endDraw();
 }
 

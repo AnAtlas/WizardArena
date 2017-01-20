@@ -1,6 +1,7 @@
 #pragma once
 #include "SharedContext.hpp"
 #include "BaseState.hpp"
+#include "Utilities.hpp"
 
 enum Sheet{TileSize = 32, SheetWidth = 256, SheetHeight = 256};
 
@@ -15,6 +16,8 @@ struct TileInfo {
 			this->id = id;
 			return;
 		}
+		if (!tmgr->requireResource(texture))
+			return;
 		this->texture = texture;
 		this->id = id;
 		sprite.setTexture(*tmgr->getResource(texture));

@@ -8,4 +8,5 @@ void main(int argc, void** argv[]){
 		game.render();
 		game.lateUpdate();
 	}
+	system("PAUSE");
 }

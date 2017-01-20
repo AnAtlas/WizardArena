@@ -15,9 +15,7 @@ namespace Utils {
 		if (hModule) {
 			char path[256];
 			GetModuleFileNameA(hModule, path, sizeof(path));
-
-			//TODO:Find working thing for this
-			//PathRemoveFileSpecA(path);
+			PathRemoveFileSpecA(path);
 			strcat_s(path, "\\");
 			return std::string(path);
 		}

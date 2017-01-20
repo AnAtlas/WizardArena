@@ -1,5 +1,6 @@
 #include "Map.hpp"
 #include "StateManager.hpp"
+#include "EntityBase.hpp"
 
 Map::Map(SharedContext* context, BaseState* currentState)
 	:context(context), defaultTile(context), maxMapSize(32, 32), tileCount(0),
@@ -20,6 +21,11 @@ Tile* Map::getTile(unsigned int x, unsigned int y) {
 	return (itr != tileMap.end() ? itr->second : nullptr);
 }
 
+TileInfo* Map::getDefaultTile() { return &defaultTile; }
+float Map::getGravity() { return mapGravity; }
+unsigned int Map::getTileSize() { return Sheet::TileSize; }
+const sf::Vector2u& Map::getMapSize() { return maxMapSize; }
+const sf::Vector2f& Map::getPlayerStart() { return playerStart; }
 unsigned int Map::convertCoords(unsigned int x, unsigned int y) {
 	return (x * maxMapSize.x) + y; // Row-Major
 }
@@ -172,6 +178,31 @@ void Map::loadMap(const std::string& path) {
 		}
 		else if (type == "NEXTMAP") {
 			keystream >> nextMap;
+		}
+		else if (type == "PLAYER") {
+			if (playerId != -1)
+				continue;
+			//set up player position here
+			playerId = entityMgr->add(EntityType::Player);
+			if (playerId < 0)
+				continue;
+			float playerX = 0; float playerY = 0;
+			keystream >> playerX >> playerY;
+			entityMgr->find(playerId)->setPosition(playerX, playerY);
+			playerStart = sf::Vector2f(playerX, playerY);
+		}
+		else if (type == "ENEMY") {
+			std::string enemyName;
+			keystream >> enemyName;
+			int enemyId = entityMgr->add(EntityType::Enemy, enemyName);
+			if (enemyId < 0)
+				continue;
+			float enemyX = 0; float enemyY = 0;
+			keystream >> enemyX >> enemyY;
+			entityMgr->find(enemyId)->setPosition(enemyX, enemyY);
+		}
+		else {
+			std::cerr << "! Unknown type \"" << type << "\"." << std::endl;
 		}
 	}
 }

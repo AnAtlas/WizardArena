@@ -23,7 +23,7 @@ private:
 		return true;
 	}
 
-	void loadPaths(std::string& pathFile) {
+	void loadPaths(const std::string& pathFile) {
 		std::ifstream pathf;
 		pathf.open(Utils::GetWorkingDirectory() + pathFile);
 		if (pathf.is_open()) {

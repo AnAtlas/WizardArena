@@ -12,6 +12,10 @@ EntityBase::EntityBase(EntityManager* entityMgr)
 
 }
 
+EntityBase::~EntityBase() {
+
+}
+
 void EntityBase::setPosition(float& x, float& y) {
 	position = sf::Vector2f(x, y);
 	updateAABB();
@@ -27,11 +31,22 @@ void EntityBase::setSize(float& x, float& y) {
 	updateAABB();
 }
 
+void EntityBase::setAcceleration(float x, float y) {
+	acceleration = sf::Vector2f(x, y);
+}
+
 void EntityBase::setState(const EntityState& state) {
-	if (state == EntityState::Dying)
+	if (this->state == EntityState::Dying)
 		return;
 	this->state = state;
 }
+
+const sf::Vector2f& EntityBase::getSize() { return size; }
+std::string EntityBase::getName() { return name; }
+EntityState EntityBase::getState() { return state; }
+unsigned int EntityBase::getId() { return id; }
+EntityType EntityBase::getType() { return type; }
+const sf::Vector2f& EntityBase::getPosition() { return position; }
 
 void EntityBase::move(float x, float y) {
 	positionOld = position;
@@ -154,4 +169,55 @@ void EntityBase::checkCollisions() {
 			}
 		}
 	}
+}
+
+void EntityBase::resolveCollisions() {
+	if (!collisions.empty()) {
+		std::sort(collisions.begin(), collisions.end(), sortCollisions);
+		Map* gameMap = entityManager->getContext()->gameMap;
+		unsigned int tileSize = gameMap->getTileSize();
+		for (auto &itr : collisions) {
+			if (!AABB.intersects(itr.tileBounds))
+				continue;
+			//Debug
+			if (entityManager->getContext()->debugOverlay.debug()) {
+				sf::Vector2f tempPos(itr.tileBounds.left, itr.tileBounds.top);
+				sf::RectangleShape* rect = new sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
+				rect->setPosition(tempPos);
+				rect->setFillColor(sf::Color(255, 255, 0, 150));
+				entityManager->getContext()->debugOverlay.add(rect);
+			}//end debug
+			float xDiff = (AABB.left + (AABB.width / 2)) - (itr.tileBounds.left + (itr.tileBounds.width / 2));
+			float yDiff = (AABB.top + (AABB.height / 2)) - (itr.tileBounds.top + (itr.tileBounds.height / 2));
+			float resolve = 0;
+			if (abs(xDiff) > abs(yDiff)) {
+				if (xDiff > 0) {
+					resolve = (itr.tileBounds.left + tileSize) - AABB.left;
+				}
+				else {
+					resolve = -((itr.tileBounds.left + AABB.width) - itr.tileBounds.left);
+				}
+				move(resolve, 0);
+				velocity.x = 0;
+				collidingOnX = true;
+			}
+			else {
+				if (yDiff > 0) {
+					resolve = (itr.tileBounds.top + tileSize) - AABB.top;
+				}
+				else {
+					resolve = -((AABB.top + AABB.height) - itr.tileBounds.top);
+				}
+				move(0, resolve);
+				velocity.y = 0;
+				if (collidingOnY)
+					continue;
+				referenceTile = itr.tile;
+				collidingOnY = true;
+			}
+		}
+		collisions.clear();
+	}
+	if (!collidingOnY)
+		referenceTile = nullptr;
 }

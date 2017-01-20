@@ -69,6 +69,6 @@ int Anim_Base::getActionStart() { return frameActionStart; }
 int Anim_Base::getActionEnd() { return frameActionEnd; }
 float Anim_Base::getFrameTime() { return frameTime; }
 float Anim_Base::getElapsedTime() { return elapsedTime; }
-
+std::string Anim_Base::getName() { return name; }
 bool Anim_Base::isLooping() { return loop; }
 bool Anim_Base::isPlaying() { return playing; }
