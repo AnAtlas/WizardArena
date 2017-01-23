@@ -2,9 +2,11 @@
 #include "SpriteSheet.hpp"
 
 void Anim_Directional::cropSprite() {
+	sf::Vector2f padding = spriteSheet->getSheetPadding();
+	sf::Vector2f spacing = spriteSheet->getSpriteSpacing();
 	sf::IntRect rect(
-		spriteSheet->getSpriteSize().x * frameCurrent,
-		spriteSheet->getSpriteSize().y * (frameRow + (short)spriteSheet->getDirection()),
+		spriteSheet->getSpriteSize().x * frameCurrent + padding.x + (spacing.x * frameCurrent),
+		(spriteSheet->getSpriteSize().y * (frameRow + (short)spriteSheet->getDirection())) + padding.y + ((frameRow + (short)spriteSheet->getDirection()) * spacing.y),
 		spriteSheet->getSpriteSize().x,
 		spriteSheet->getSpriteSize().y);
 	spriteSheet->cropSprite(rect);

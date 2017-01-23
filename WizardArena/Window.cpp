@@ -28,6 +28,7 @@ void Window::create(){
 	if(fullscreen){ style = sf::Style::Fullscreen; }
 
 	window.create(sf::VideoMode(windowSize.x,windowSize.y,32),windowTitle,style);
+	window.setFramerateLimit(72);
 }
 
 void Window::beginDraw(){ window.clear(sf::Color::Black); }

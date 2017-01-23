@@ -4,6 +4,7 @@
 #include "TextureManager.hpp"
 #include "EntityManager.hpp"
 #include "DebugOverlay.hpp"
+#include "SystemManager.hpp"
 
 class Map;
 struct SharedContext{
@@ -12,11 +13,13 @@ struct SharedContext{
 		eventManager(nullptr),
 		textureManager(nullptr),
 		entityManager(nullptr),
+		systemManager(nullptr),
 		gameMap(nullptr) {}
 	Window* window;
 	EventManager* eventManager;
 	TextureManager* textureManager;
 	EntityManager* entityManager;
+	SystemManager* systemManager;
 	Map* gameMap;
 	DebugOverlay debugOverlay;
 };

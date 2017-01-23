@@ -1,6 +1,5 @@
 #include "Map.hpp"
 #include "StateManager.hpp"
-#include "EntityBase.hpp"
 
 Map::Map(SharedContext* context, BaseState* currentState)
 	:context(context), defaultTile(context), maxMapSize(32, 32), tileCount(0),
@@ -16,9 +15,14 @@ Map::~Map() {
 	context->gameMap = nullptr;
 }
 
-Tile* Map::getTile(unsigned int x, unsigned int y) {
-	auto itr = tileMap.find(convertCoords(x, y));
-	return (itr != tileMap.end() ? itr->second : nullptr);
+Tile* Map::getTile(unsigned int x, unsigned int y, unsigned int layer) {
+	if (x < 0 || y < 0 || x >= maxMapSize.x || y >= maxMapSize.y || layer < 0 || layer >= Sheet::NumLayers)
+		return nullptr;
+	
+	auto itr = tileMap.find(convertCoords(x, y, layer));
+	if (itr == tileMap.end())
+		return nullptr;
+	return itr->second;
 }
 
 TileInfo* Map::getDefaultTile() { return &defaultTile; }
@@ -26,12 +30,16 @@ float Map::getGravity() { return mapGravity; }
 unsigned int Map::getTileSize() { return Sheet::TileSize; }
 const sf::Vector2u& Map::getMapSize() { return maxMapSize; }
 const sf::Vector2f& Map::getPlayerStart() { return playerStart; }
-unsigned int Map::convertCoords(unsigned int x, unsigned int y) {
-	return (x * maxMapSize.x) + y; // Row-Major
+unsigned int Map::convertCoords(unsigned int x, unsigned int y, unsigned int layer) {
+	return ((layer * maxMapSize.y + y) * maxMapSize.x + x);
 }
 
 void Map::loadNext() {
 	loadNextMap = true;
+}
+
+int Map::getPlayerId() {
+	return playerId;
 }
 
 void Map::update(float dT) {
@@ -49,9 +57,10 @@ void Map::update(float dT) {
 	background.setPosition(viewSpace.left, viewSpace.top);
 }
 
-void Map::draw() {
+void Map::draw(unsigned int layer) {
+	if (layer >= Sheet::NumLayers)
+		return;
 	sf::RenderWindow* window = context->window->getRenderWindow();
-	window->draw(background);
 	sf::FloatRect viewSpace = context->window->getViewSpace();
 
 	sf::Vector2i tileBegin(
@@ -65,9 +74,7 @@ void Map::draw() {
 	unsigned int count = 0;
 	for (int x = tileBegin.x; x <= tileEnd.x; ++x) {
 		for (int y = tileBegin.y; y <= tileEnd.y; ++y) {
-			if (x < 0 || y < 0)
-				continue;
-			Tile* tile = getTile(x, y);
+			Tile* tile = getTile(x, y, layer);
 			if (!tile)
 				continue;
 			sf::Sprite& sprite = tile->properties->sprite;
@@ -129,15 +136,18 @@ void Map::loadMap(const std::string& path) {
 				continue;
 			}
 			sf::Vector2i tileCoords;
-			keystream >> tileCoords.x >> tileCoords.y;
-			if (tileCoords.x > maxMapSize.x || tileCoords.y > maxMapSize.y) {
+			unsigned int tileLayer = 0;
+			unsigned int tileSolidity = 0;
+			keystream >> tileCoords.x >> tileCoords.y >> tileLayer >> tileSolidity;
+			if (tileCoords.x > maxMapSize.x || tileCoords.y > maxMapSize.y || tileLayer >= Sheet::NumLayers) {
 				std::cout << "! Tile is out of range: " << tileCoords.x << " " << tileCoords.y << std::endl;
 				continue;
 			}
 			Tile* tile = new Tile();
 			// Bind properties of a tile from a set
 			tile->properties = itr->second;
-			if (!tileMap.emplace(convertCoords(tileCoords.x, tileCoords.y), tile).second) {
+			tile->solid = (bool)tileSolidity;
+			if (!tileMap.emplace(convertCoords(tileCoords.x, tileCoords.y, tileLayer), tile).second) {
 				//Duplicate tile detected!
 				std::cerr << "! Duplicate Tile! : " << tileCoords.x << " " << tileCoords.y << std::endl;
 				delete tile;
@@ -179,27 +189,20 @@ void Map::loadMap(const std::string& path) {
 		else if (type == "NEXTMAP") {
 			keystream >> nextMap;
 		}
-		else if (type == "PLAYER") {
-			if (playerId != -1)
+		else if (type == "ENTITY") {
+			//Set up entity here
+			std::string name;
+			keystream >> name;
+			if (name == "Player" && playerId != -1)
 				continue;
-			//set up player position here
-			playerId = entityMgr->add(EntityType::Player);
-			if (playerId < 0)
+			int entityId = context->entityManager->addEntity(name);
+			if (entityId < 0)
 				continue;
-			float playerX = 0; float playerY = 0;
-			keystream >> playerX >> playerY;
-			entityMgr->find(playerId)->setPosition(playerX, playerY);
-			playerStart = sf::Vector2f(playerX, playerY);
-		}
-		else if (type == "ENEMY") {
-			std::string enemyName;
-			keystream >> enemyName;
-			int enemyId = entityMgr->add(EntityType::Enemy, enemyName);
-			if (enemyId < 0)
-				continue;
-			float enemyX = 0; float enemyY = 0;
-			keystream >> enemyX >> enemyY;
-			entityMgr->find(enemyId)->setPosition(enemyX, enemyY);
+			if (name == "Player")
+				playerId = entityId;
+			C_Base* position = context->entityManager->getComponent<C_Position>(entityId, Component::Position);
+			if (position)
+				keystream >> *position;
 		}
 		else {
 			std::cerr << "! Unknown type \"" << type << "\"." << std::endl;

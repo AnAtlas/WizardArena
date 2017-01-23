@@ -48,6 +48,12 @@ bool SpriteSheet::loadSheet(const std::string& file) {
 				keystream >> spriteScale.x >> spriteScale.y;
 				sprite.setScale(spriteScale);
 			}
+			else if (type == "Padding") {
+				keystream >> sheetPadding.x >> sheetPadding.y;
+			}
+			else if (type == "Spacing") {
+				keystream >> spriteSpacing.x >> spriteSpacing.y;
+			}
 			else if (type == "AnimationType") {
 				keystream >> animType;
 			}
@@ -95,13 +101,26 @@ void SpriteSheet::releaseSheet() {
 	}
 }
 
-void SpriteSheet::setSpriteSize(const sf::Vector2i& size) {
+void SpriteSheet::setSpriteSize(const sf::Vector2u& size) {
 	spriteSize = size;
 	sprite.setOrigin(spriteSize.x / 2, spriteSize.y);
 }
 
 void SpriteSheet::setSpritePosition(const sf::Vector2f& pos) {
 	sprite.setPosition(pos);
+}
+
+void SpriteSheet::setSheetPadding(const sf::Vector2f& padding) {
+	sheetPadding = padding;
+}
+void SpriteSheet::setSpriteSpacing(const sf::Vector2f& spacing) {
+	spriteSpacing = spacing;
+}
+const sf::Vector2f& SpriteSheet::getSheetPadding() {
+	return sheetPadding;
+}
+const sf::Vector2f& SpriteSheet::getSpriteSpacing() {
+	return spriteSpacing;
 }
 
 void SpriteSheet::setDirection(const Direction& dir) {
@@ -135,7 +154,7 @@ bool SpriteSheet::setAnimation(const std::string& name, const bool& play, const 
 	return true;
 }
 
-sf::Vector2i SpriteSheet::getSpriteSize() {
+sf::Vector2u SpriteSheet::getSpriteSize() {
 	return spriteSize;
 }
 

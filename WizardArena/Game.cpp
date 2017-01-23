@@ -1,14 +1,17 @@
 #include "Game.hpp"
 
-Game::Game(): window("Chapter 7", sf::Vector2u(800, 600)), stateManager(&context), entityManager(&context, 100)
+Game::Game(): window("Chapter 7", sf::Vector2u(800, 600)), stateManager(&context), 
+				entityManager(&systemManager, &textureManager)
 {
 	clock.restart();
 	srand(time(nullptr));
 
+	systemManager.setEntityManager(&entityManager);
 	context.window = &window;
 	context.eventManager = window.getEventManager();
 	context.textureManager = &textureManager;
 	context.entityManager = &entityManager;
+	context.systemManager = &systemManager;
 
 	stateManager.switchTo(StateType::Intro);
 }

@@ -47,17 +47,17 @@ void State_MainMenu::onCreate(){
 		labels[i].setPosition(buttonPosition);
 	}
 
-	EventManager* evMgr = stateMgr->getContext()->eventManager;
+	EventManager* evMgr = stateManager->getContext()->eventManager;
 	evMgr->addCallback(StateType::MainMenu,"Mouse_Left",&State_MainMenu::mouseClick,this);
 }
 
 void State_MainMenu::onDestroy(){
-	EventManager* evMgr = stateMgr->getContext()->eventManager;
+	EventManager* evMgr = stateManager->getContext()->eventManager;
 	evMgr->removeCallback(StateType::MainMenu,"Mouse_Left");
 }
 
 void State_MainMenu::activate(){
-	if(stateMgr->hasState(StateType::Game) 
+	if(stateManager->hasState(StateType::Game)
 		&& labels[0].getString() == "PLAY")
 	{
 		labels[0].setString(sf::String("RESUME"));
@@ -78,18 +78,18 @@ void State_MainMenu::mouseClick(EventDetails* l_details){
 			mousePos.y <= rects[i].getPosition().y + halfY)
 		{
 			if(i == 0){
-				stateMgr->switchTo(StateType::Game);
+				stateManager->switchTo(StateType::Game);
 			} else if(i == 1){
 				// Credits state.
 			} else if(i == 2){
-				stateMgr->getContext()->window->close();
+				stateManager->getContext()->window->close();
 			}
 		}
 	}
 }
 
 void State_MainMenu::draw(){
-	sf::RenderWindow* window = stateMgr->getContext()->window->getRenderWindow();
+	sf::RenderWindow* window = stateManager->getContext()->window->getRenderWindow();
 	window->draw(text);
 	for(int i = 0; i < 3; ++i){
 		window->draw(rects[i]);

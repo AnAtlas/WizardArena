@@ -8,9 +8,9 @@ State_Intro::~State_Intro(){}
 
 void State_Intro::onCreate(){
 
-	sf::Vector2u windowSize = stateMgr->getContext()->window->getRenderWindow()->getSize();
+	sf::Vector2u windowSize = stateManager->getContext()->window->getRenderWindow()->getSize();
 
-	TextureManager* textureMgr = stateMgr->getContext()->textureManager;
+	TextureManager* textureMgr = stateManager->getContext()->textureManager;
 	textureMgr->requireResource("Intro");
 	introSprite.setTexture(*textureMgr->getResource("Intro"));
 	introSprite.setOrigin(textureMgr->getResource("Intro")->getSize().x / 2.0f,
@@ -28,15 +28,15 @@ void State_Intro::onCreate(){
 		textRect.top + textRect.height / 2.0f);
 	text.setPosition(introSprite.getPosition().x, introSprite.getPosition().y + textureMgr->getResource("Intro")->getSize().y / 1.5f);
 
-	EventManager* evMgr = stateMgr->getContext()->eventManager;
+	EventManager* evMgr = stateManager->getContext()->eventManager;
 	evMgr->addCallback(StateType::Intro,"Intro_Continue",&State_Intro::Continue,this);
 }
 
 void State_Intro::onDestroy(){
-	TextureManager* texMgr = stateMgr->getContext()->textureManager;
+	TextureManager* texMgr = stateManager->getContext()->textureManager;
 	texMgr->releaseResource("Intro");
 
-	EventManager* evMgr = stateMgr->getContext()->eventManager;
+	EventManager* evMgr = stateManager->getContext()->eventManager;
 	evMgr->removeCallback(StateType::Intro,"Intro_Continue");
 }
 
@@ -44,15 +44,15 @@ void State_Intro::update(const sf::Time& l_time){
 }
 
 void State_Intro::draw(){
-	sf::RenderWindow* window = stateMgr->getContext()->window->getRenderWindow();
+	sf::RenderWindow* window = stateManager->getContext()->window->getRenderWindow();
 
 	window->draw(introSprite);
 	window->draw(text);
 }
 
 void State_Intro::Continue(EventDetails* details){
-	stateMgr->switchTo(StateType::MainMenu);
-	stateMgr->remove(StateType::Intro);
+	stateManager->switchTo(StateType::MainMenu);
+	stateManager->remove(StateType::Intro);
 }
 
 void State_Intro::activate(){}

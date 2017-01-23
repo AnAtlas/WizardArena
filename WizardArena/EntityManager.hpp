@@ -1,52 +1,67 @@
 #pragma once
+#include "Bitmask.hpp"
+#include "C_Position.hpp"
+#include "C_SpriteSheet.hpp"
+//#include "C_State.hpp"
+//#include "C_Movable.hpp"
+//#include "C_Collidable.hpp"
+#include "TextureManager.hpp"
 #include <unordered_map>
 #include <functional>
-#include "Player.hpp"
-#include "Enemy.hpp"
+#include <vector>
 
-using EntityContainer = std::unordered_map<unsigned int, EntityBase*>;
-using EntityFactory = std::unordered_map<EntityType, std::function<EntityBase*(void)>>;
-using EnemyTypes = std::unordered_map<std::string, std::string>;
+using EntityId = unsigned int;
 
-struct SharedContext;
+using ComponentContainer = std::vector<C_Base*>;
+using EntityData = std::pair<Bitmask, ComponentContainer>;
+using EntityContainer = std::unordered_map<EntityId, EntityData>;
+using ComponentFactory = std::unordered_map<Component, std::function<C_Base*(void)>>;
 
+
+class SystemManager;
 class EntityManager {
-
 private:
 	template<class T>
-	void registerEntity(const EntityType& type) {
-		entityFactory[type] = [this]() -> EntityBase*
-		{
-			return new T(this);
+	void addComponentType(const Component& id) {
+		cFactory[id] = []()->C_Base* {
+			return new T();
 		};
 	}
 
-	void processRemovals();
-	void loadEnemyTypes(const std::string& name);
-	void entityCollisionCheck();
-
-	EntityContainer entities;
-	EnemyTypes enemyTypes;
-	EntityFactory entityFactory;
-	SharedContext* context;
 	unsigned int idCounter;
-	unsigned int maxEntities;
+	EntityContainer entities;
+	ComponentFactory cFactory;
 
-	std::vector<unsigned int> entitiesToRemove;
-
+	SystemManager* systems;
+	TextureManager* textureManager;
 public:
-	EntityManager(SharedContext* context, unsigned int maxEntities);
+	EntityManager(SystemManager* sysMgr, TextureManager* textureMgr);
 	~EntityManager();
 
-	int add(const EntityType& type, const std::string& name = "");
-	EntityBase* find(unsigned int id);
-	EntityBase* find(const std::string& name);
-	void remove(unsigned int id);
+	int addEntity(const Bitmask& mask);
+	int addEntity(const std::string& entityFile);
+	bool removeEntity(const EntityId& id);
 
-	void update(float dT);
-	void draw();
+	bool addComponent(const EntityId& entity, const Component& component);
+
+	template<class T>
+	T* getComponent(const EntityId& entity, const Component& component){
+		auto itr = entities.find(entity);
+		if (itr == entities.end())
+			return nullptr;
+		//Found the entity
+		if (!itr->second.first.getBit((unsigned int)component))
+			return nullptr;
+		//Component exists
+		auto& container = itr->second.second;
+		auto aComponent = std::find_if(container.begin(), container.end(), [&component](C_Base* c) {
+			return c->getType() == component;
+		});
+		return (aComponent != container.end() ? dynamic_cast<T*>(*aComponent) : nullptr);
+	}
+
+	bool removeComponent(const EntityId& entity, const Component& component);
+	bool hasComponent(const EntityId& entity, const Component& component);
 
 	void purge();
-
-	SharedContext* getContext();
 };

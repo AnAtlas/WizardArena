@@ -23,6 +23,7 @@ private:
 	Window window;
 	StateManager stateManager;
 	EntityManager entityManager;
+	SystemManager systemManager;
 	TextureManager textureManager;
 	sf::Clock clock;
 	sf::Time elapsed;

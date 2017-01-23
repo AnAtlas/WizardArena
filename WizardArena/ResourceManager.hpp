@@ -10,8 +10,12 @@ private:
 	std::unordered_map<std::string, std::string> paths;
 
 	std::pair<T*, unsigned int>* find(const std::string& id) {
-		auto itr = resources.find(id);
-		return (itr != resources.end() ? &itr->second : nullptr);
+		if (resources.size() > 0) {
+			auto itr = resources.find(id);
+			return (itr != resources.end() ? &itr->second : nullptr);
+		}
+		else
+			return nullptr;
 	}
 
 	bool unload(const std::string& id) {

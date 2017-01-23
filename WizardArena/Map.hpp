@@ -3,7 +3,7 @@
 #include "BaseState.hpp"
 #include "Utilities.hpp"
 
-enum Sheet{TileSize = 32, SheetWidth = 256, SheetHeight = 256};
+enum Sheet{TileSize = 32, SheetWidth = 256, SheetHeight = 256, NumLayers = 4};
 
 using TileID = unsigned int;
 
@@ -46,6 +46,7 @@ struct TileInfo {
 struct Tile {
 	TileInfo* properties;
 	bool warp; // Is the tile a warp
+	bool solid;
 	//Other flags unique to each tile.
 };
 
@@ -55,7 +56,7 @@ using TileSet = std::unordered_map<TileID, TileInfo*>;
 class Map {
 private:
 	//Method to convert 2d coordinats into 1d ints
-	unsigned int convertCoords(unsigned int x, unsigned int y);
+	unsigned int convertCoords(unsigned int x, unsigned int y, unsigned int layer);
 	void loadTiles(const std::string& path);
 	void purgeMap();
 	void purgeTileSet();
@@ -66,6 +67,7 @@ private:
 	TileInfo defaultTile;
 	sf::Vector2u maxMapSize;
 	sf::Vector2f playerStart;
+	int playerId;
 	unsigned int tileCount;
 	unsigned int tileSetCount;
 	float mapGravity;
@@ -79,14 +81,15 @@ public:
 	Map(SharedContext* context, BaseState* currentState);
 	~Map();
 
-	Tile* getTile(unsigned int x, unsigned int y);
+	Tile* getTile(unsigned int x, unsigned int y, unsigned int layer);
 	TileInfo* getDefaultTile();
 	float getGravity();
 	unsigned int getTileSize();
+	int getPlayerId();
 	const sf::Vector2u& getMapSize();
 	const sf::Vector2f& getPlayerStart();
 	void loadMap(const std::string& path);
 	void loadNext();
 	void update(float dT);
-	void draw();
+	void draw(unsigned int layer);
 };

@@ -16,9 +16,11 @@ public:
 	void toggleOverlay(EventDetails* details);
 	void update(const sf::Time& l_time);
 	void draw();
-
+	void playerMove(EventDetails* details);
 	void mainMenu(EventDetails* l_details);
 	void pause(EventDetails* l_details);
 private:
 	Map* gameMap;
+	void updateCamera();
+	int player;
 };

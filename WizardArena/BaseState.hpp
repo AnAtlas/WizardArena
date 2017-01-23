@@ -5,7 +5,7 @@ class StateManager;
 class BaseState{
 	friend class StateManager;
 public:
-	BaseState(StateManager* stateManager):stateMgr(stateManager),
+	BaseState(StateManager* stateManager):stateManager(stateManager),
 		transparent(false), transcendent(false){}
 	virtual ~BaseState(){}
 
@@ -22,11 +22,11 @@ public:
 	bool isTransparent()const{ return transparent; }
 	void setTranscendent(const bool& l_transcendence){ transcendent = l_transcendence; }
 	bool isTranscendent()const{ return transcendent; }
-	StateManager* getStateManager(){ return stateMgr; }
+	StateManager* getStateManager(){ return stateManager; }
 	sf::View& getView() { return view; }
 
 protected:
-	StateManager* stateMgr;
+	StateManager* stateManager;
 	sf::View view;
 	bool transparent;
 	bool transcendent;
