@@ -5,7 +5,7 @@ void Anim_Directional::cropSprite() {
 	sf::Vector2f padding = spriteSheet->getSheetPadding();
 	sf::Vector2f spacing = spriteSheet->getSpriteSpacing();
 	sf::IntRect rect(
-		spriteSheet->getSpriteSize().x * frameCurrent + padding.x + (spacing.x * frameCurrent),
+		(spriteSheet->getSpriteSize().x * frameCurrent) + padding.x + (spacing.x * frameCurrent),
 		(spriteSheet->getSpriteSize().y * (frameRow + (short)spriteSheet->getDirection())) + padding.y + ((frameRow + (short)spriteSheet->getDirection()) * spacing.y),
 		spriteSheet->getSpriteSize().x,
 		spriteSheet->getSpriteSize().y);
@@ -13,17 +13,13 @@ void Anim_Directional::cropSprite() {
 }
 
 void Anim_Directional::frameStep() {
-	if (frameStart < frameEnd)
-		++frameCurrent;
-	else
-		--frameCurrent;
-
-	if ((frameStart < frameEnd && frameCurrent > frameEnd) || (frameStart > frameEnd && frameCurrent < frameEnd)) {
-		if (loop) {
-			frameCurrent = frameStart;
-			return;
-		}
-		frameCurrent = frameEnd;
+	bool b = setFrame(frameCurrent + (frameStart <= frameEnd ? 1 : -1));
+	if (b)
+		return;
+	if (loop)
+		setFrame(frameStart);
+	else {
+		setFrame(frameEnd);
 		pause();
 	}
 }

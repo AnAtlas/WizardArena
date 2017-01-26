@@ -87,11 +87,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;SFML_STATIC;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Projects\WizardArena\SFML-2.4.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Projects\WizardArena\SFML-2.4.1\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-network-s-d.lib;sfml-audio-s-d.lib;sfml-main-d.lib;opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;%(AdditionalDependencies);shlwapi.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -115,13 +118,16 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;SFML_STATIC;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Projects\WizardArena\SFML-2.4.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Projects\WizardArena\SFML-2.4.1\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;sfml-network-s.lib;sfml-audio-s.lib;sfml-main.lib;opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;%(AdditionalDependencies);shlwapi.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,6 +148,77 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Anim_Base.h" />
+    <ClInclude Include="Anim_Directional.h" />
+    <ClInclude Include="BaseState.h" />
+    <ClInclude Include="Bitmask.h" />
+    <ClInclude Include="Communicator.h" />
+    <ClInclude Include="C_Base.h" />
+    <ClInclude Include="C_Collidable.h" />
+    <ClInclude Include="C_Controller.h" />
+    <ClInclude Include="C_Drawable.h" />
+    <ClInclude Include="C_Movable.h" />
+    <ClInclude Include="C_Position.h" />
+    <ClInclude Include="C_SpriteSheet.h" />
+    <ClInclude Include="C_State.h" />
+    <ClInclude Include="DebugOverlay.h" />
+    <ClInclude Include="Directions.h" />
+    <ClInclude Include="ECS_Types.h" />
+    <ClInclude Include="EntityEvents.h" />
+    <ClInclude Include="EntityMessages.h" />
+    <ClInclude Include="Entity_Manager.h" />
+    <ClInclude Include="EventManager.h" />
+    <ClInclude Include="Event_Queue.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="MessageHandler.h" />
+    <ClInclude Include="Observer.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="SharedContext.h" />
+    <ClInclude Include="SpriteSheet.h" />
+    <ClInclude Include="StateManager.h" />
+    <ClInclude Include="State_Game.h" />
+    <ClInclude Include="State_GameOver.h" />
+    <ClInclude Include="State_Intro.h" />
+    <ClInclude Include="State_MainMenu.h" />
+    <ClInclude Include="State_Paused.h" />
+    <ClInclude Include="System_Manager.h" />
+    <ClInclude Include="S_Base.h" />
+    <ClInclude Include="S_Collision.h" />
+    <ClInclude Include="S_Control.h" />
+    <ClInclude Include="S_Movement.h" />
+    <ClInclude Include="S_Renderer.h" />
+    <ClInclude Include="S_SheetAnimation.h" />
+    <ClInclude Include="S_State.h" />
+    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Utilities.h" />
+    <ClInclude Include="Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Anim_Base.cpp" />
+    <ClCompile Include="Anim_Directional.cpp" />
+    <ClCompile Include="Entity_Manager.cpp" />
+    <ClCompile Include="EventManager.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="SpriteSheet.cpp" />
+    <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="State_Game.cpp" />
+    <ClCompile Include="State_GameOver.cpp" />
+    <ClCompile Include="State_Intro.cpp" />
+    <ClCompile Include="State_MainMenu.cpp" />
+    <ClCompile Include="State_Paused.cpp" />
+    <ClCompile Include="System_Manager.cpp" />
+    <ClCompile Include="S_Base.cpp" />
+    <ClCompile Include="S_Collision.cpp" />
+    <ClCompile Include="S_Control.cpp" />
+    <ClCompile Include="S_Movement.cpp" />
+    <ClCompile Include="S_Renderer.cpp" />
+    <ClCompile Include="S_SheetAnimation.cpp" />
+    <ClCompile Include="S_State.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -23,6 +23,7 @@ protected:
 	float elapsedTime;
 	bool loop;
 	bool playing;
+	bool hasMoved;
 	std::string name;
 	SpriteSheet* spriteSheet;
 
@@ -43,7 +44,7 @@ public:
 	}
 
 	void setSpriteSheet(SpriteSheet* sheet);
-	void setFrame(const unsigned int& frame);
+	bool setFrame(Frame frame);
 	void setStartFrame(Frame frame);
 	void setEndFrame(Frame frame);
 	void setFrameRow(Frame row);
@@ -67,4 +68,5 @@ public:
 	bool isLooping();
 	bool isPlaying();
 	bool isInAction();
+	bool checkMoved();
 };

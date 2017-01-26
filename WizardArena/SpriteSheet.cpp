@@ -4,7 +4,7 @@
 #include "Utilities.hpp"
 
 SpriteSheet::SpriteSheet(TextureManager* textMgr) :textureManager(textMgr), animationCurrent(nullptr),
-	spriteScale(1.f, 1.f), direction(Direction::Right) 
+	spriteScale(1.f, 1.f), direction(Direction::Down) 
 {
 	
 }

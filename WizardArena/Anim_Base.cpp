@@ -2,7 +2,7 @@
 #include "SpriteSheet.hpp"
 
 Anim_Base::Anim_Base() : frameCurrent(0), frameStart(0), frameEnd(0), frameRow(0), frameTime(0.f), elapsedTime(0),
-	frameActionStart(-1), frameActionEnd(-1), loop(false), playing(false)
+	frameActionStart(-1), frameActionEnd(-1), loop(false), playing(false), hasMoved(false)
 {
 
 }
@@ -15,10 +15,14 @@ void Anim_Base::setSpriteSheet(SpriteSheet* sheet) {
 	spriteSheet = sheet;
 }
 
-void Anim_Base::setFrame(const unsigned int& frame) {
+bool Anim_Base::setFrame(Frame frame) {
 	if ((frame >= frameStart && frame <= frameEnd) ||
-		(frame >= frameEnd && frame <= frameStart))
+		(frame >= frameEnd && frame <= frameStart)) {
 		frameCurrent = frame;
+		hasMoved = true;
+		return true;
+	}
+	return false;
 }
 
 bool Anim_Base::isInAction() {
@@ -72,3 +76,8 @@ float Anim_Base::getElapsedTime() { return elapsedTime; }
 std::string Anim_Base::getName() { return name; }
 bool Anim_Base::isLooping() { return loop; }
 bool Anim_Base::isPlaying() { return playing; }
+bool Anim_Base::checkMoved() { 
+	bool result = hasMoved;
+	hasMoved = false;
+	return result;
+}
