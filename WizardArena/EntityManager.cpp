@@ -6,9 +6,9 @@ EntityManager::EntityManager(SystemManager* sysMgr, TextureManager* textureMgr)
 {
 	addComponentType<C_Position>(Component::Position);
 	addComponentType<C_SpriteSheet>(Component::SpriteSheet);
-	//addComponentType<C_State>(Component::State);
-	//addComponentType<C_Movable>(Component::Movable);
-	//addComponentType<C_Controller>(Component::Controller);
+	addComponentType<C_State>(Component::State);
+	addComponentType<C_Movable>(Component::Movable);
+	addComponentType<C_Controller>(Component::Controller);
 	//addComponentType<C_Collidable>(Component::Collidable);
 }
 
@@ -70,6 +70,7 @@ int EntityManager::addEntity(const std::string& entityFile) {
 			if (!component)
 				continue;
 			keystream >> *component;
+
 			if (component->getType() == Component::SpriteSheet) {
 				C_SpriteSheet* sheet = (C_SpriteSheet*)component;
 				sheet->create(textureManager);

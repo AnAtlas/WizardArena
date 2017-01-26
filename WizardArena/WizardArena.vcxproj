@@ -34,7 +34,11 @@
     <ClCompile Include="State_Paused.cpp" />
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="S_Base.cpp" />
+    <ClCompile Include="S_Controller.cpp" />
+    <ClCompile Include="S_Movement.cpp" />
     <ClCompile Include="S_Renderer.cpp" />
+    <ClCompile Include="S_SheetAnimation.cpp" />
+    <ClCompile Include="S_State.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -44,9 +48,12 @@
     <ClInclude Include="Bitmask.hpp" />
     <ClInclude Include="Communicator.hpp" />
     <ClInclude Include="C_Base.hpp" />
+    <ClInclude Include="C_Controller.hpp" />
     <ClInclude Include="C_Drawable.hpp" />
+    <ClInclude Include="C_Movable.hpp" />
     <ClInclude Include="C_Position.hpp" />
     <ClInclude Include="C_SpriteSheet.hpp" />
+    <ClInclude Include="C_State.hpp" />
     <ClInclude Include="DebugOverlay.hpp" />
     <ClInclude Include="Directions.hpp" />
     <ClInclude Include="ECS_Types.hpp" />
@@ -70,7 +77,11 @@
     <ClInclude Include="State_Paused.hpp" />
     <ClInclude Include="SystemManager.hpp" />
     <ClInclude Include="S_Base.hpp" />
+    <ClInclude Include="S_Controller.hpp" />
+    <ClInclude Include="S_Movement.hpp" />
     <ClInclude Include="S_Renderer.hpp" />
+    <ClInclude Include="S_SheetAnimation.hpp" />
+    <ClInclude Include="S_State.hpp" />
     <ClInclude Include="TextureManager.hpp" />
     <ClInclude Include="Utilities.hpp" />
     <ClInclude Include="Window.hpp" />
