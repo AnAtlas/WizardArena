@@ -27,7 +27,8 @@ void State_Game::onCreate(){
 	gameMap->loadMap("media/Maps/map1.map");
 	S_Movement* ass = stateManager->getContext()->systemManager->getSystem<S_Movement>(System::Movement);
 	ass->setMap(gameMap);
-	//stateManager->getContext()->systemManager->getSystem<S_Movement>(System::Movement)->setMap(gameMap);
+	stateManager->getContext()->systemManager->getSystem<S_Movement>(System::Movement)->setMap(gameMap);
+	stateManager->getContext()->systemManager->getSystem<S_Collision>(System::Collision)->setMap(gameMap);
 	player = gameMap->getPlayerId();
 }
 

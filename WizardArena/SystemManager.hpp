@@ -5,6 +5,7 @@
 #include "S_Controller.hpp"
 #include "S_SheetAnimation.hpp"
 #include "S_State.hpp"
+#include "S_Collision.hpp"
 #include "EventQueue.hpp"
 #include "MessageHandler.hpp"
 #include "Window.hpp"

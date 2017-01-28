@@ -9,7 +9,7 @@ EntityManager::EntityManager(SystemManager* sysMgr, TextureManager* textureMgr)
 	addComponentType<C_State>(Component::State);
 	addComponentType<C_Movable>(Component::Movable);
 	addComponentType<C_Controller>(Component::Controller);
-	//addComponentType<C_Collidable>(Component::Collidable);
+	addComponentType<C_Collidable>(Component::Collidable);
 }
 
 EntityManager::~EntityManager() {

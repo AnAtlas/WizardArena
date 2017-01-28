@@ -15,11 +15,11 @@ private:
 
 public:
 	C_Collidable() : C_Base(Component::Collidable),
-		origin(Origin::Mid_Bottom), collidingOnX(false),collidingOnY(false)
-	{		
+		origin(Origin::Mid_Bottom), collidingOnX(false), collidingOnY(false)
+	{
 	}
 	virtual ~C_Collidable() {}
-	
+
 	void readIn(std::stringstream& stream) {
 		unsigned int orig = 0;
 		stream >> boundingBox.width >> boundingBox.height >> offset.x >> offset.y >> orig;
@@ -60,4 +60,12 @@ public:
 			break;
 		}
 	}
+
+	const sf::FloatRect& getCollidable() { return boundingBox; }
+	bool isCollidingOnX() { return collidingOnX; }
+	bool isCollidingOnY() { return collidingOnY; }
+
+	void setCollidable(const sf::FloatRect& rect) { boundingBox = rect; }
+	void setOrigin(const Origin& orig) { origin = orig; }
+
 };

@@ -7,7 +7,7 @@ SystemManager::SystemManager()
 	systems[System::State] = new S_State(this);
 	systems[System::Control] = new S_Controller(this);
 	systems[System::Movement] = new S_Movement(this);
-	//systems[System::Collision] = new S_Collision(this);
+	systems[System::Collision] = new S_Collision(this);
 	systems[System::SheetAnimation] = new S_SheetAnimation(this);
 	systems[System::Renderer] = new S_Renderer(this);
 }
