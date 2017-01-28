@@ -4,7 +4,7 @@
 #include "C_SpriteSheet.hpp"
 #include "C_State.hpp"
 #include "C_Movable.hpp"
-//#include "C_Collidable.hpp"
+#include "C_Collidable.hpp"
 #include "C_Controller.hpp"
 #include "TextureManager.hpp"
 #include <unordered_map>

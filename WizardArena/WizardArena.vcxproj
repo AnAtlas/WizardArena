@@ -34,6 +34,7 @@
     <ClCompile Include="State_Paused.cpp" />
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="S_Base.cpp" />
+    <ClCompile Include="S_Collision.cpp" />
     <ClCompile Include="S_Controller.cpp" />
     <ClCompile Include="S_Movement.cpp" />
     <ClCompile Include="S_Renderer.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="Bitmask.hpp" />
     <ClInclude Include="Communicator.hpp" />
     <ClInclude Include="C_Base.hpp" />
+    <ClInclude Include="C_Collidable.hpp" />
     <ClInclude Include="C_Controller.hpp" />
     <ClInclude Include="C_Drawable.hpp" />
     <ClInclude Include="C_Movable.hpp" />
@@ -77,6 +79,7 @@
     <ClInclude Include="State_Paused.hpp" />
     <ClInclude Include="SystemManager.hpp" />
     <ClInclude Include="S_Base.hpp" />
+    <ClInclude Include="S_Collision.hpp" />
     <ClInclude Include="S_Controller.hpp" />
     <ClInclude Include="S_Movement.hpp" />
     <ClInclude Include="S_Renderer.hpp" />
