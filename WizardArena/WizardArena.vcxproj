@@ -24,6 +24,7 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GUI_Element.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
@@ -64,7 +65,10 @@
     <ClInclude Include="EntityMessages.hpp" />
     <ClInclude Include="EventManager.hpp" />
     <ClInclude Include="EventQueue.hpp" />
+    <ClInclude Include="FontManager.hpp" />
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="GUI_Element.hpp" />
+    <ClInclude Include="GUI_Style.hpp" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Message.hpp" />
     <ClInclude Include="MessageHandler.hpp" />

@@ -31,4 +31,16 @@ namespace Utils {
 		return "";
 	}
 #endif
+
+	inline void ReadQuotedString(std::stringstream& stream, std::string& str) {
+		stream >> str;
+		if (str.at(0) == '"') {
+			while (str.at(str.length() - 1) != '"' || !stream.eof()) {
+				std::string str2;
+				stream >> str2;
+				str.append(" " + str2);
+			}
+		}
+		str.erase(std::remove(str.begin(), str.end(), '"'), str.end());
+	}
 }

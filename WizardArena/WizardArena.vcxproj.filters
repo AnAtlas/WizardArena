@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Utilities">
       <UniqueIdentifier>{60f11d6e-49fc-40cc-920a-5af917202b7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GUI">
+      <UniqueIdentifier>{d1805380-bd85-4c9f-ac97-825e7aaaf7a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GUI">
+      <UniqueIdentifier>{dc6739ef-6d49-4ab1-bc08-c5485bbdb47e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EventManager.cpp">
@@ -110,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI_Element.cpp">
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +256,15 @@
     </ClInclude>
     <ClInclude Include="Window.hpp">
       <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI_Style.hpp">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="FontManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI_Element.hpp">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
