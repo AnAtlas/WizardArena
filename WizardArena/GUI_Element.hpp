@@ -54,6 +54,7 @@ public:
 	virtual void applyStyle();
 
 	//Getters and Setters
+	GUI_ElementType getType();
 	const std::string& getName();
 	void setName(const std::string& name);
 	const sf::Vector2f& getPosition();

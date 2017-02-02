@@ -156,11 +156,19 @@ const sf::Vector2f& GUI_Element::getSize() {
 	return style.at(state).size;
 }
 
+const std::string& GUI_Element::getName() {
+	return name;
+}
+
 void GUI_Element::setActive(const bool& active) {
 	if (active != this->active) {
 		this->active = active;
 		setRedraw(true);
 	}
+}
+
+GUI_ElementType GUI_Element::getType() {
+	return type;
 }
 
 std::string GUI_Element::getText() {
@@ -171,3 +179,44 @@ void GUI_Element::setText(const std::string& text) {
 	visual.text.setString(text);
 	setRedraw(true);
 }
+
+void GUI_Element::setName(const std::string& name) {
+	this->name = name;
+}
+
+const sf::Vector2f& GUI_Element::getPosition() {
+	return position;
+}
+
+GUI_ElementState GUI_Element::getState() {
+	return state;
+}
+
+void GUI_Element::setRedraw(const bool& redraw) {
+	this->needsRedraw = redraw;
+}
+
+bool GUI_Element::needsRedraw() {
+	return needsRedraw;
+}
+
+void GUI_Element::setOwner(GUI_Interface* owner) {
+	this->owner = owner;
+}
+
+GUI_Interface* GUI_Element::getOwner() {
+	return owner;
+}
+
+bool GUI_Element::hasOwner() {
+	return owner != nullptr;
+}
+
+bool GUI_Element::isActive() {
+	return active;
+}
+
+bool GUI_Element::isControl() {
+	return isControl;
+}
+

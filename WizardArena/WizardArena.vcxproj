@@ -25,6 +25,7 @@
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GUI_Element.cpp" />
+    <ClCompile Include="GUI_Interface.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
@@ -68,6 +69,8 @@
     <ClInclude Include="FontManager.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GUI_Element.hpp" />
+    <ClInclude Include="GUI_Event.hpp" />
+    <ClInclude Include="GUI_Interface.hpp" />
     <ClInclude Include="GUI_Style.hpp" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Message.hpp" />
