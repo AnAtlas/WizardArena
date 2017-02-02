@@ -229,3 +229,110 @@ void GUI_Interface::draw(sf::RenderTarget* target) {
 	target->draw(titleBar);
 	target->draw(visual.text);
 }
+
+void GUI_Interface::beginMoving() {
+	if (!showTitleBar || !movable)
+		return;
+	beingMoved = true;
+	SharedContext* context = guiManager->getContext();
+	moveMouseLast = sf::Vector2f(context->eventManager->getMousePos(context->window->getRenderWindow()));
+}
+
+void GUI_Interface::stopMoving() {
+	beingMoved = false;
+}
+
+sf::Vector2f GUI_Interface::getGlobalPosition() {
+	sf::Vector2f pos = position;
+	GUI_Interface* i = parent;
+	while (i) {
+		pos += i->getPosition();
+		i = i->parent;
+	}
+	return pos;
+}
+
+void GUI_Interface::applyStyle() {
+	GUI_Element::applyStyle();//Call base method
+	visual.backgroundSolid.setPosition(0.0f, 0.0f);
+	visual.backgroundImage.setPosition(0.0f, 0.0f);
+	titleBar.setSize(sf::Vector2f(style[state].size.x, 16.0f));
+	titleBar.setPosition(position.x, position.y - titleBar.getSize().y);
+	titleBar.setFillColor(style[state].elementColor);
+	visual.text.setPosition(titleBar.getPosition() + style[state].textPadding);
+	visual.glyph.setPosition(titleBar.getPosition() + style[state].glyphPadding);
+}
+
+void GUI_Interface::redraw() {
+	if (backdropTexture->getSize().x != style[state].size.x || backdropTexture->getSize().y != style[state].size.y)
+		backdropTexture->create(style[state].size.x, style[state].size.y);
+	backdropTexture->clear(sf::Color(0, 0, 0, 0));
+	applyStyle();
+	backdropTexture->draw(visual.backgroundSolid);
+
+	if (style[state].backgroundImage != "")
+		backdropTexture->draw(visual.backgroundImage);
+	backdropTexture->display();
+	backdrop.setTexture(backdropTexture->getTexture());
+	backdrop.setTextureRect(sf::IntRect(0, 0, style[state].size.x, style[state].size.y));
+	setRedraw(false);
+}
+
+void GUI_Interface::redrawContent() {
+	if (contentTexture->getSize().x != contentSize.x || contentTexture->getSize().y != contentSize.y)
+		contentTexture->create(contentSize.x, contentSize.y);
+
+	contentTexture->clear(sf::Color(0, 0, 0, 0));
+
+	for (auto &itr : elements) {
+		GUI_Element* element = itr.second;
+		if (!element->isActive() || element->isControl())
+			continue;
+		element->applyStyle();
+		element->draw(contentTexture);
+		element->setRedraw(false);
+	}
+
+	contentTexture->display();
+	content.setTexture(contentTexture->getTexture());
+
+	content.setTextureRect(sf::IntRect(scrollHorizontal, scrollVertical, style[state].size.x, style[state].size.y));
+	contentRedraw = false;
+}
+
+void GUI_Interface::redrawControls() {
+	if (controlTexture->getSize().x != style[state].size.x || controlTexture->getSize().y != style[state].size.y)
+		controlTexture->create(style[state].size.x, style[state].size.y);
+
+	controlTexture->clear(sf::Color(0, 0, 0, 0));
+
+	for (auto &itr : elements) {
+		GUI_Element* element = itr.second;
+		if (!element->isActive() || !element->isControl())
+			continue;
+		element->applyStyle();
+		element->draw(controlTexture);
+		element->setRedraw(false);
+	}
+	
+	controlTexture->display();
+	control.setTexture(controlTexture->getTexture());
+	control.setTextureRect(sf::IntRect(0, 0, style[state].size.x, style[state].size.y));
+	controlRedraw = false;
+}
+
+void GUI_Interface::updateScrollHorizontal(unsigned int percent) {
+	if (percent > 100)
+		return;
+	scrollHorizontal = ((contentSize.x - getSize().x) / 100) * percent;
+	sf::IntRect rect = content.getTextureRect();
+	content.setTextureRect(sf::IntRect(scrollHorizontal, scrollVertical, rect.width, rect.height));
+}
+
+void GUI_Interface::updateScrollVertical(unsigned int percent) {
+	if (percent > 100)
+		return;
+	scrollVertical = ((contentSize.y - getSize().y) / 100) * percent;
+	sf::IntRect rect = content.getTextureRect();
+	content.setTextureRect(sf::IntRect(scrollHorizontal, scrollVertical, rect.width, rect.height));
+}
