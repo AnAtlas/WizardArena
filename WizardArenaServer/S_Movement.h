@@ -11,7 +11,7 @@ public:
 	~S_Movement();
 
 	void Update(float l_dT);
-	void HandleEvent(const EntityId& l_entity,const EntityEvent& l_event);
+	void HandleEvent(const EntityId& l_entity, const EntityEvent& l_event);
 	void Notify(const Message& l_message);
 
 	void SetMap(Map* l_gameMap);

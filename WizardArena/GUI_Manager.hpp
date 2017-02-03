@@ -56,7 +56,7 @@ public:
 	void handleTextEntered(EventDetails* details);
 
 	void addEvent(GUI_Event event);
-	void pollEvent(GUI_Event& event);
+	bool pollEvent(GUI_Event& event);
 
 	void update(float dT);
 	void render(sf::RenderWindow* window);

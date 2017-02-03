@@ -106,8 +106,7 @@ void S_Movement::MovementStep(float l_dT, C_Movable* l_movable, C_Position* l_po
 
 void S_Movement::SetMap(Map* l_gameMap){ m_gameMap = l_gameMap; }
 
-void S_Movement::StopEntity(const EntityId& l_entity, 
-	const Axis& l_axis)
+void S_Movement::StopEntity(const EntityId& l_entity, const Axis& l_axis)
 {
 	C_Movable* movable = m_systemManager->GetEntityManager()->GetComponent<C_Movable>(l_entity,Component::Movable);
 	if(l_axis == Axis::x){
@@ -117,8 +116,7 @@ void S_Movement::StopEntity(const EntityId& l_entity,
 	}
 }
 
-void S_Movement::SetDirection(const EntityId& l_entity, 
-	const Direction& l_dir)
+void S_Movement::SetDirection(const EntityId& l_entity, const Direction& l_dir)
 {
 	C_Movable* movable = m_systemManager->GetEntityManager()->GetComponent<C_Movable>(l_entity,Component::Movable);
 	movable->SetDirection(l_dir);

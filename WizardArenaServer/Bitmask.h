@@ -2,6 +2,7 @@
 #include <stdint.h>
 
 using Bitset = uint32_t;
+
 class Bitmask{
 public:
 	Bitmask() : bits(0){}
@@ -13,8 +14,9 @@ public:
 	bool Matches(const Bitmask& l_bits, 
 		const Bitset& l_relevant = 0)const
 	{
-		return(l_relevant ? ((l_bits.GetMask() & l_relevant) == (bits & l_relevant))
-			:(l_bits.GetMask() == bits));
+		return(l_relevant ? 
+			((l_bits.GetMask() & l_relevant) == (bits & l_relevant))
+			: (l_bits.GetMask() == bits));
 	}
 
 	bool GetBit(const unsigned int& l_pos)const{

@@ -3,7 +3,7 @@
 #include "Map.h"
 
 S_Collision::S_Collision(SystemManager* l_systemMgr) 
-	: S_Base(System::Collision,l_systemMgr)
+	: S_Base(System::Collision, l_systemMgr)
 {
 	Bitmask req;
 	req.TurnOnBit((unsigned int)Component::Position);

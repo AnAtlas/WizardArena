@@ -7,10 +7,9 @@ State_Game::State_Game(StateManager* l_stateManager)
 State_Game::~State_Game(){}
 
 void State_Game::OnCreate(){
-	EventManager* evMgr = m_stateMgr->
-		GetContext()->m_eventManager;
+	EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
 
-	evMgr->AddCallback(StateType::Game,"Key_Escape",&State_Game::MainMenu,this);
+	evMgr->AddCallback(StateType::Game, "Key_Escape", &State_Game::MainMenu, this);
 	evMgr->AddCallback(StateType::Game, "Key_O", &State_Game::ToggleOverlay, this);
 	evMgr->AddCallback(StateType::Game, "Player_MoveLeft", &State_Game::PlayerMove, this);
 	evMgr->AddCallback(StateType::Game, "Player_MoveRight", &State_Game::PlayerMove, this);
@@ -18,23 +17,27 @@ void State_Game::OnCreate(){
 	evMgr->AddCallback(StateType::Game, "Player_MoveDown", &State_Game::PlayerMove, this);
 
 	sf::Vector2u size = m_stateMgr->GetContext()->m_wind->GetWindowSize();
-	m_view.setSize(size.x,size.y);
-	m_view.setCenter(size.x/2,size.y/2);
+	m_view.setSize(size.x, size.y);
+	m_view.setCenter(size.x / 2, size.y / 2);
 	m_view.zoom(0.6f);
 	m_stateMgr->GetContext()->m_wind->GetRenderWindow()->setView(m_view);
 
-	m_gameMap = new Map(m_stateMgr->GetContext()/*, this*/);
+	m_gameMap = new Map(m_stateMgr->GetContext());
 	m_gameMap->LoadMap("media/Maps/map1.map");
 
 	EntityManager* entities = m_stateMgr->GetContext()->m_entityManager;
 	m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Collision>(System::Collision)->SetMap(m_gameMap);
 	m_stateMgr->GetContext()->m_systemManager->GetSystem<S_Movement>(System::Movement)->SetMap(m_gameMap);
 	m_player = m_gameMap->GetPlayerId();
+
+	GUI_Manager* gui = m_stateMgr->GetContext()->m_guiManager;
+	gui->LoadInterface(StateType::Game, "Test.interface", "Test");
+	gui->GetInterface(StateType::Game, "Test")->SetPosition(sf::Vector2f(32.f, 32.f));
 }
 
 void State_Game::OnDestroy(){
-	EventManager* evMgr = m_stateMgr->
-		GetContext()->m_eventManager;
+	m_stateMgr->GetContext()->m_guiManager->RemoveInterface(StateType::Game, "Test");
+	EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
 	evMgr->RemoveCallback(StateType::Game, "Key_Escape");
 	evMgr->RemoveCallback(StateType::Game, "Key_O");
 	evMgr->RemoveCallback(StateType::Game, "Player_MoveLeft");
@@ -43,7 +46,6 @@ void State_Game::OnDestroy(){
 	evMgr->RemoveCallback(StateType::Game, "Player_MoveDown");
 	
 	delete m_gameMap;
-	m_gameMap = nullptr;
 }
 
 void State_Game::Update(const sf::Time& l_time){
@@ -81,7 +83,7 @@ void State_Game::UpdateCamera(){
 }
 
 void State_Game::Draw(){
-	for(unsigned int i = 0; i < Sheet::Num_Layers; ++i){
+	for (unsigned int i = 0; i < Sheet::Num_Layers; ++i){
 		m_gameMap->Draw(i);
 		m_stateMgr->GetContext()->m_systemManager->Draw(
 			m_stateMgr->GetContext()->m_wind, i);
