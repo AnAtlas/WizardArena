@@ -336,3 +336,35 @@ void GUI_Interface::updateScrollVertical(unsigned int percent) {
 	sf::IntRect rect = content.getTextureRect();
 	content.setTextureRect(sf::IntRect(scrollHorizontal, scrollVertical, rect.width, rect.height));
 }
+
+void GUI_Interface::adjustContentSize(const GUI_Element* reference) {
+	if (reference) {
+		sf::Vector2f bottomRight = reference->getPosition() + reference->getSize();
+		if (bottomRight.x > contentSize.x) {
+			contentSize.x = bottomRight.x;
+			controlRedraw = true;
+		}
+		if (bottomRight.y > contentSize.y) {
+			contentSize.y = bottomRight.y;
+			controlRedraw = true;
+		}
+		return;
+	}
+	sf::Vector2f farthest = getSize();
+
+	for (auto &itr : elements) {
+		GUI_Element* element = itr.second;
+		if (!element->isActive() || element->isControl())
+			continue;
+		sf::Vector2f bottomRight = element->getPosition() + element->getSize();
+		if (bottomRight.x > farthest.x) {
+			farthest.x = bottomRight.x;
+			controlRedraw = true;
+		}
+		if (bottomRight.y > farthest.y) {
+			farthest.y = bottomRight.y;
+			controlRedraw = true;
+		}
+	}
+	setContentSize(farthest);
+}

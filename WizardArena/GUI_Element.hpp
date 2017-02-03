@@ -57,9 +57,9 @@ public:
 	GUI_ElementType getType();
 	const std::string& getName();
 	void setName(const std::string& name);
-	const sf::Vector2f& getPosition();
+	const sf::Vector2f& getPosition() const;
 	void setPosition(const sf::Vector2f& pos);
-	const sf::Vector2f& getSize();
+	const sf::Vector2f& getSize() const;
 	GUI_ElementState getState();
 	void setState(const GUI_ElementState& state);
 	void setRedraw(const bool& redraw);
