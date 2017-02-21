@@ -33,9 +33,9 @@ protected:
 	GUI_ElementState state;
 	GUI_Interface* owner;
 
-	bool needsRedraw;
+	bool needRedraw;
 	bool active;
-	bool isControl;
+	bool control;
 
 public:
 	GUI_Element(const std::string& name, const GUI_ElementType& type, GUI_Interface* owner);

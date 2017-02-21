@@ -4,6 +4,9 @@
 #include "StateManager.hpp"
 #include "TextureManager.hpp"
 #include "EntityManager.hpp"
+#include "FontManager.hpp"
+#include "GUI_Manager.hpp"
+
 #include <iostream>
 
 class Game{
@@ -25,6 +28,8 @@ private:
 	EntityManager entityManager;
 	SystemManager systemManager;
 	TextureManager textureManager;
+	FontManager fontManager;
+	GUI_Manager guiManager;
 	sf::Clock clock;
 	sf::Time elapsed;
 	void restartClock();

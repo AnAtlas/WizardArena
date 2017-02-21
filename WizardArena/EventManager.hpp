@@ -21,14 +21,17 @@ enum class EventType{
 	MouseLeft = sf::Event::MouseLeft,
 	Closed = sf::Event::Closed,
 	TextEntered = sf::Event::TextEntered,
-	Keyboard = sf::Event::Count + 1, Mouse, Joystick
+	Keyboard = sf::Event::Count + 1, Mouse, Joystick,
+	GUI_Click, GUI_Release, GUI_Hover, GUI_Leave
 };
 
 struct EventInfo{
 	EventInfo(){ code = 0; }
 	EventInfo(int l_event){ code = l_event; }
+	EventInfo(GUI_Event guiEvent) { gui = guiEvent; }
 	union{
 		int code;
+		GUI_Event gui;
 	};
 };
 
@@ -45,12 +48,19 @@ struct EventDetails{
 	int mouseWheelDelta;
 	int keyCode; // Single key code.
 
+	std::string guiInterface;
+	std::string guiElement;
+	GUI_EventType guiEvent;
+
 	void clear(){
 		size = sf::Vector2i(0, 0);
 		textEntered = 0;
 		mouse = sf::Vector2i(0, 0);
 		mouseWheelDelta = 0;
 		keyCode = -1;
+		guiInterface = "";
+		guiElement = "";
+		guiEvent = GUI_EventType::None;
 	}
 };
 
@@ -58,7 +68,16 @@ using Events = std::vector<std::pair<EventType, EventInfo>>;
 
 struct Binding{
 	Binding(const std::string& l_name) : name(l_name), details(l_name), c(0){}
-	~Binding(){}
+	~Binding(){
+		//GUI Portion
+		for (auto itr = events.begin(); itr != events.end(); ++itr) {
+			if (itr->first == EventType::GUI_Click || itr->first == EventType::GUI_Release ||
+				itr->first == EventType::GUI_Hover || itr->first == EventType::GUI_Leave) {
+				delete[] itr->second.gui.mInterface;
+				delete[] itr->second.gui.element;
+			}
+		}
+	}
 	void bindEvent(EventType l_type, EventInfo l_info = EventInfo()){
 		events.emplace_back(l_type, l_info);
 	}

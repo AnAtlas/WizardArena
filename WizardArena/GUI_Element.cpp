@@ -4,7 +4,7 @@
 #include "SharedContext.hpp"
 
 GUI_Element::GUI_Element(const std::string& name, const GUI_ElementType& type, GUI_Interface* owner)
-	:name(name), type(type), owner(owner), state(GUI_ElementState::Neutral), needsRedraw(false), active(true), isControl(false)
+	:name(name), type(type), owner(owner), state(GUI_ElementState::Neutral), needRedraw(false), active(true), control(false)
 {
 
 }
@@ -152,7 +152,7 @@ void GUI_Element::releaseFont(const std::string& name) {
 	owner->getManager()->getContext()->fontManager->releaseResource(name);
 }
 
-const sf::Vector2f& GUI_Element::getSize() {
+const sf::Vector2f& GUI_Element::getSize() const {
 	return style.at(state).size;
 }
 
@@ -184,7 +184,7 @@ void GUI_Element::setName(const std::string& name) {
 	this->name = name;
 }
 
-const sf::Vector2f& GUI_Element::getPosition() {
+const sf::Vector2f& GUI_Element::getPosition() const {
 	return position;
 }
 
@@ -193,11 +193,11 @@ GUI_ElementState GUI_Element::getState() {
 }
 
 void GUI_Element::setRedraw(const bool& redraw) {
-	this->needsRedraw = redraw;
+	this->needRedraw = redraw;
 }
 
 bool GUI_Element::needsRedraw() {
-	return needsRedraw;
+	return needRedraw;
 }
 
 void GUI_Element::setOwner(GUI_Interface* owner) {
@@ -217,6 +217,6 @@ bool GUI_Element::isActive() {
 }
 
 bool GUI_Element::isControl() {
-	return isControl;
+	return control;
 }
 
